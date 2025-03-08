@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class BattleshipGrid {
+public class BattleshipGrid extends JPanel {
     private JPanel panel;
     private JButton[][] tiles;
     private boolean[][] coords;
