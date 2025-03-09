@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 
 public interface BattleshipInterface {
     // Static Constants - CANNOT BE CHANGED
-    static int INIT_WIDTH = 800;
-    static int INIT_HEIGHT = 600;
+    public static final int INIT_WIDTH = 800;
+    public static final int INIT_HEIGHT = 600;
 
     // Interface Methods - MUST BE IMPLEMENTED BY SUBCLASSES
     void createGrid();

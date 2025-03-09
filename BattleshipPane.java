@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BattleshipPanel extends JPanel implements BattleshipInterface, ActionListener{
+public class BattleshipPane extends JPanel implements BattleshipInterface, ActionListener{
 
     // Constants - CANNOT BE CHANGED
     private static final int INIT_WIDTH = 850;
@@ -21,8 +21,9 @@ public class BattleshipPanel extends JPanel implements BattleshipInterface, Acti
     private int numMisses;
     private int numShipsSunk;
     private boolean allSunk;
+    private BattleshipGrid grid;
 
-    public BattleshipPanel(int gridSize, int numShips) {
+    public BattleshipPane(int gridSize, int numShips) {
         // Set the size of the panel
         setPreferredSize(new Dimension(INIT_WIDTH, INIT_HEIGHT));
         // Set the background color of the panel
@@ -43,7 +44,9 @@ public class BattleshipPanel extends JPanel implements BattleshipInterface, Acti
         this.numShipsSunk = 0;
         // Set the boolean value of allSunk
         this.allSunk = false;
-        setLayout(new GridLayout(gridSize, gridSize));
+        grid = new BattleshipGrid(gridSize, numShips);
+        setLayout(new BorderLayout());
+        add(grid,BorderLayout.CENTER);
         // Create a new grid
         createGrid();
     }

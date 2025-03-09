@@ -21,20 +21,57 @@ public class Battleship extends JPanel {
             Console.errprintln("Error setting native L&F: " + e.getMessage());
             hasError = true;
         }
-        int input[] = new int[2];
+
+        int gridSize = 0;
+        int numberOfShips = 0;
+
+        while (gridSize <= 0) {
+            String gridSizeInput = JOptionPane.showInputDialog(null, "Enter the grid size (Integers Only): ");
+            if (gridSizeInput == null) {
+                Console.errprintln("Input cancelled. Exiting.");
+                hasError = true;
+                return;
+            }
+            try {
+                gridSize = Integer.parseInt(gridSizeInput);
+                if (gridSize <= 0) {
+                    Console.errprintln("Grid size must be a positive integer.");
+                }
+            } catch (NumberFormatException e) {
+                Console.errprintln("Invalid input. Please enter a valid integer for grid size.");
+            }
+        }
+
+        while (numberOfShips <= 0) {
+            String numberOfShipsInput = JOptionPane.showInputDialog(null, "Enter the number of ships (Integers Only): ");
+            if (numberOfShipsInput == null) {
+                Console.errprintln("Input cancelled. Exiting.");
+                hasError = true;
+                return;
+            }
+            try {
+                numberOfShips = Integer.parseInt(numberOfShipsInput);
+                if (numberOfShips <= 0) {
+                    Console.errprintln("Number of ships must be a positive integer.");
+                }
+            } catch (NumberFormatException e) {
+                Console.errprintln("Invalid input. Please enter a valid integer for number of ships.");
+            }
+        }
+
         try {
-            input[0] = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the grid size (Integers Only): "));
-            input[1] = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the number of ships (Integers Only): "));
-            grid = new BattleshipGrid(input[0], input[1]);
-        } catch (IllegalArgumentException | NullPointerException e) {
+            grid = new BattleshipGrid(gridSize, numberOfShips);
+        } catch (Exception e) {
             e.printStackTrace();
             Console.errprintln("Error creating grid: " + e.getMessage());
             hasError = true;
         }
+
         if (grid != null) {
             frame.add(grid, BorderLayout.CENTER);  // Correct use of BorderLayout.CENTER
         } else {
-            Console.errprintln("Error: grid initialization failed.");
+            Console.errprintln("Error: grid initialization failed because this.grid is null.");
+            hasError = true;
         }
         frame.pack();
         frame.setVisible(true);
@@ -42,9 +79,9 @@ public class Battleship extends JPanel {
 
     public static void main(String[] args) {
         Console.toggleVisibility();
-        Console.errprintln(1.0 / 0.0);
-        Console.println(BattleshipInterface.INIT_WIDTH);
-        Console.println(BattleshipInterface.INIT_HEIGHT);
+        Console.println(1.0 / 0.0);
+        Console.println("INIT_WIDTH: " + BattleshipInterface.INIT_WIDTH);
+        Console.println("INIT_HEIGHT: " + BattleshipInterface.INIT_HEIGHT);
 
         // Time Stuff
         Date now = new Date();
@@ -55,15 +92,30 @@ public class Battleship extends JPanel {
 
         Battleship battleship = new Battleship();
         if (hasError) {
-            Console.errprintln("Failed to start the game due to an error. The game will now exit in");
-            try {
-                for (int i = 5; i > -1; i--) {
-                    Thread.sleep(1000);
-                    Console.errprintln(i);
+            Console.errprintln("Failed to start the game due to an error.");
+            
+            // Show a yes/no confirmation dialog
+            int response = JOptionPane.showConfirmDialog(
+                null, 
+                "Failed to start the game due to an error. Do you want to exit in 5 seconds?", 
+                "Error", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.ERROR_MESSAGE
+            );
+        
+            if (response == JOptionPane.YES_OPTION) {
+                Console.errprintln("Exiting in");
+                try {
+                    for (int i = 5; i > -1; i--) {
+                        Thread.sleep(1000);
+                        Console.errprintln(i);
+                    }
+                    System.exit(1);
+                } catch (InterruptedException e) {
+                    Console.errprintln("Error: " + e.getMessage());
                 }
-                System.exit(1);
-            } catch (InterruptedException e) {
-                Console.errprintln("Error: " + e.getMessage());
+            } else {
+                Console.println("Exiting canceled. The program will continue running.");
             }
         } else {
             Console.println("Game Started: " + formattedDateTime);

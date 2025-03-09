@@ -9,7 +9,7 @@ public class BattleshipGrid extends JPanel {
     private JButton[][] tiles;
     private boolean[][] coords;
     private boolean[][] locatedCoords;
-    private BattleshipPanel grid;
+    private BattleshipPane grid;
     private int gridSize;
     private int numShips;
     private int numShots;
@@ -30,6 +30,7 @@ public class BattleshipGrid extends JPanel {
         tiles = new JButton[gridSize][gridSize];
         coords = new boolean[gridSize][gridSize];
         locatedCoords = new boolean[gridSize][gridSize];
+        // tiles.setBounds(BattleshipInterface.INIT_WIDTH / gridSize);
 
     }
 }
