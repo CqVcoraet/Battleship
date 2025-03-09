@@ -43,6 +43,8 @@ public class Battleship extends JPanel {
     public static void main(String[] args) {
         Console.toggleVisibility();
         Console.errprintln(1.0 / 0.0);
+        Console.println(BattleshipInterface.INIT_WIDTH);
+        Console.println(BattleshipInterface.INIT_HEIGHT);
 
         // Time Stuff
         Date now = new Date();
@@ -53,12 +55,15 @@ public class Battleship extends JPanel {
 
         Battleship battleship = new Battleship();
         if (hasError) {
-            Console.errprintln("Failed to start the game due to an error. The game will now exit in 5 seconds.");
+            Console.errprintln("Failed to start the game due to an error. The game will now exit in");
             try {
-                Thread.sleep(5000);
+                for (int i = 5; i > -1; i--) {
+                    Thread.sleep(1000);
+                    Console.errprintln(i);
+                }
                 System.exit(1);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Console.errprintln("Error: " + e.getMessage());
             }
         } else {
             Console.println("Game Started: " + formattedDateTime);

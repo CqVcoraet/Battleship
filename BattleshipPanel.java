@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BattleshipPanel extends JPanel implements BattleshipTemplate, ActionListener{
+public class BattleshipPanel extends JPanel implements BattleshipInterface, ActionListener{
 
     // Constants - CANNOT BE CHANGED
     private static final int INIT_WIDTH = 850;
