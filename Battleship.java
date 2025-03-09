@@ -8,6 +8,7 @@ import java.util.Locale;
 public class Battleship extends JPanel {
     private JFrame frame;
     private BattleshipGrid grid;
+    public static boolean hasError = false;
 
     public Battleship() {
         // Set the frame size
@@ -18,15 +19,17 @@ public class Battleship extends JPanel {
         } catch (Exception e) {
             e.printStackTrace();
             Console.errprintln("Error setting native L&F: " + e.getMessage());
+            hasError = true;
         }
         int input[] = new int[2];
         try {
             input[0] = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the grid size (Integers Only): "));
             input[1] = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the number of ships (Integers Only): "));
             grid = new BattleshipGrid(input[0], input[1]);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             e.printStackTrace();
             Console.errprintln("Error creating grid: " + e.getMessage());
+            hasError = true;
         }
         if (grid != null) {
             frame.add(grid, BorderLayout.CENTER);  // Correct use of BorderLayout.CENTER
@@ -38,6 +41,9 @@ public class Battleship extends JPanel {
     }
 
     public static void main(String[] args) {
+        Console.toggleVisibility();
+        Console.errprintln(1.0 / 0.0);
+
         // Time Stuff
         Date now = new Date();
 
@@ -46,6 +52,16 @@ public class Battleship extends JPanel {
         String formattedDateTime = formatter.format(now);
 
         Battleship battleship = new Battleship();
-        Console.println("Game Started: " + formattedDateTime);
+        if (hasError) {
+            Console.errprintln("Failed to start the game due to an error. The game will now exit in 5 seconds.");
+            try {
+                Thread.sleep(5000);
+                System.exit(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Console.println("Game Started: " + formattedDateTime);
+        }
     }
 }
