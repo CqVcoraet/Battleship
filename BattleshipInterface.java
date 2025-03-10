@@ -17,5 +17,4 @@ public interface BattleshipInterface {
     void fireShot(int row, int col);
     void checkForShip(int row, int col);
     void checkForSunkShip(int row, int col);
-    void checkForWin();
 }

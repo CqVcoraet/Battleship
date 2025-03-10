@@ -13,6 +13,9 @@ public class Battleship extends JPanel {
     public Battleship() {
         // Set the frame size
         frame = new JFrame("Battleship");
+        frame.setSize(600, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
         // JButton Color Workaround for Mac - FINALLY FIGURED IT OUT!
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());

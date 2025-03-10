@@ -1,101 +1,83 @@
-// Imported Packages
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.Random; // Import the Random class
 
-public class BattleshipPane extends JPanel implements BattleshipInterface, ActionListener{
-
-    // Constants - CANNOT BE CHANGED
-    private static final int INIT_WIDTH = 850;
-    private static final int INIT_HEIGHT = 600;
-    
-    // Instance Variables
-    private int a;
+public class BattleshipPane extends JPanel {
+    private JButton[][] buttons;
+    private boolean[][] locatedCoords; // Stores ship locations
     private int gridSize;
     private int numShips;
-    private int numShots;
-    private int numHits;
-    private int numMisses;
-    private int numShipsSunk;
-    private boolean allSunk;
-    private BattleshipGrid grid;
+    
+    public BattleshipPane(int rows, int cols) {
+        gridSize = rows;
+        numShips = 5; // Example: number of ships to place
+        locatedCoords = new boolean[gridSize][gridSize];
+        buttons = new JButton[gridSize][gridSize];
+        setLayout(new GridLayout(gridSize, gridSize)); // Grid layout for the buttons
 
-    public BattleshipPane(int gridSize, int numShips) {
-        // Set the size of the panel
-        setPreferredSize(new Dimension(INIT_WIDTH, INIT_HEIGHT));
-        // Set the background color of the panel
-        setBackground(Color.WHITE);
-        // Set the layout of the panel
-        setLayout(new BorderLayout());
-        // Set the grid size
-        this.gridSize = gridSize;
-        // Set the number of ships
-        this.numShips = numShips;
-        // Set the number of shots
-        this.numShots = 0;
-        // Set the number of hits
-        this.numHits = 0;
-        // Set the number of misses
-        this.numMisses = 0;
-        // Set the number of ships sunk
-        this.numShipsSunk = 0;
-        // Set the boolean value of allSunk
-        this.allSunk = false;
-        grid = new BattleshipGrid(gridSize, numShips);
-        setLayout(new BorderLayout());
-        add(grid,BorderLayout.CENTER);
-        // Create a new grid
+        // Create grid with buttons
         createGrid();
+        
+        // Randomly place ships
+        placeShipsRandomly();
     }
 
-    @Override
-    public void createGrid() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createGrid'");
+    private void createGrid() {
+        // Initialize buttons and add action listeners
+        for (int row = 0; row < gridSize; row++) {
+            for (int col = 0; col < gridSize; col++) {
+                buttons[row][col] = new JButton();
+                buttons[row][col].setPreferredSize(new Dimension(50, 50)); // Button size
+                buttons[row][col].setBackground(Color.CYAN); // Default color for water
+                buttons[row][col].setActionCommand(row + "," + col); // Action command holds coordinates
+                buttons[row][col].addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        handleTileClick(e); // Handle button click
+                    }
+                });
+                add(buttons[row][col]); // Add button to panel
+            }
+        }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+    private void handleTileClick(ActionEvent e) {
+        // Get the button that was clicked
+        JButton clickedButton = (JButton) e.getSource();
+        
+        // Parse the coordinates from the action command
+        String[] coordinates = clickedButton.getActionCommand().split(",");
+        int row = Integer.parseInt(coordinates[0]);
+        int col = Integer.parseInt(coordinates[1]);
+
+        // Check if it's a hit or miss
+        if (isHit(row, col)) {
+            clickedButton.setBackground(Color.RED); // Hit
+        } else {
+            clickedButton.setBackground(Color.BLUE); // Miss
+        }
+
+        clickedButton.setEnabled(false); // Disable button after click
     }
 
-    @Override
-    public void updateDisplay() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateDisplay'");
+    private boolean isHit(int row, int col) {
+        // Returns true if the given location contains a ship
+        return locatedCoords[row][col];
     }
 
-    @Override
-    public void placeShip(int row, int col, boolean horizontal) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'placeShip'");
-    }
+    private void placeShipsRandomly() {
+        // Randomly place ships on the grid
+        Random random = new Random(); // Create an instance of Random
+        for (int i = 0; i < numShips; i++) {
+            int shipRow, shipCol;
+            do {
+                shipRow = random.nextInt(gridSize); // Random row
+                shipCol = random.nextInt(gridSize); // Random column
+            } while (locatedCoords[shipRow][shipCol]); // Ensure the location is empty
 
-    @Override
-    public void fireShot(int row, int col) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fireShot'");
-    }
-
-    @Override
-    public void checkForShip(int row, int col) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'checkForShip'");
-    }
-
-    @Override
-    public void checkForSunkShip(int row, int col) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'checkForSunkShip'");
-    }
-
-    @Override
-    public void checkForWin() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'checkForWin'");
+            locatedCoords[shipRow][shipCol] = true; // Mark this location as having a ship
+        }
     }
 }
